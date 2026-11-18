@@ -1,14 +1,19 @@
 :root {
-  font-family: system-ui, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Pretendard Variable', Pretendard, system-ui, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   color: #1f2328;
-  background: #f4f5f7;
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --border: #d0d7de;
+  background: #fff;
+  --primary: #1f3fcc;        /* 상단 바 / 강조 파랑 */
+  --primary-hover: #1834ad;
+  --accent: #ffd21f;         /* 새 콘텐츠 작성 노랑 */
+  --border: #e3e5e8;
+  --input-border: #d0d7de;
+  --text: #1f2328;
   --muted: #6b7280;
   --danger: #dc2626;
 }
 
 * { box-sizing: border-box; }
 
-body { margin: 0; min-height: 100vh; }
+body { margin: 0; min-height: 100vh; background: #fff; }
+
+a { color: inherit; }

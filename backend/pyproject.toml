@@ -9,9 +9,11 @@ authors = [
 requires-python = ">=3.15"
 dependencies = [
     "fastapi>=0.163.1",
+    "httpx>=0.28.1",
     "psycopg>=3.3.9",
     "psycopg-binary>=3.3.9",
     "psycopg2-binary>=2.9.13",
+    "python-multipart>=0.0.34",
     "sqlalchemy>=2.1.8",
     "supabase>=2.34.1",
     "uvicorn>=0.54.0",
