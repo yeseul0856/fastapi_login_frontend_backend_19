@@ -29,6 +29,7 @@ class Profile(Base):
     id = Column(String(50), primary_key=True, index=True)
     username = Column(String(50), unique=True, index=True)
     email = Column(String(120))
+    # 어디로 로그인했는지 provider: google이면 구글 로그인했다  
     provider = Column(String(50))
 
 # 회원가입할때 받을것
@@ -38,13 +39,15 @@ class EmailForm(BaseModel):
     email: str
     password: str
 
-# 테이블이 없으면 생성
+# 테이블이 없으면 생성, 모델에 정의한 테이블들을 데이터베이스에 생성해줘
 Base.metadata.create_all(bind=engine)
 
 # 요청마다 세션을 열고, 끝나면 닫는 함수 finally는 성공해도 닫고 실패해도 닫는다?
 def get_db():
+    # engine에 연결된 Session 객체를 만들어서 db 변수에 넣어라 engine은 DB 연결 정보,
     db = Session(bind=engine)
     try:
+        # FastAPI야! db(Session 객체)를 가져다 써!
         yield db
     finally:
         db.close()
@@ -69,6 +72,7 @@ def save_profile(db: Session, user, username, provider):
 
 # 회원가입을 고객한테 받아서 date로 옮겨야 하니까 post
 @app.post("/signup")
+# db 변수에는 Session 객체가 들어있고 Session은 데이터 베이스 작업도구다,"get_db() 실행해서 나온 값을 db에 넣어주세요!"
 def signup(form: EmailForm, db: Session=Depends(get_db)):
     # auth 안에 sign_up이라는 메서드가 있다 이걸 이용하면 내가 너한테 어떠한 값을 주겠다 
     res = supabase.auth.sign_up({
@@ -144,6 +148,15 @@ def me(cred: HTTPAuthorizationCredentials = Depends(bearer), db: Session = Depen
 def login_kakao():
     res = supabase.auth.sign_in_with_oauth({
         "provider": "kakao",
+        "options":{"redirect_to": "http://127.0.0.1:8000/auth/callback"}
+    })
+    return RedirectResponse(res.url)
+
+# 구글 로그인 (카카오와 같은 방식, provider만 google)
+@app.get("/login/google")
+def login_google():
+    res = supabase.auth.sign_in_with_oauth({
+        "provider": "google",
         "options":{"redirect_to": "http://127.0.0.1:8000/auth/callback"}
     })
     return RedirectResponse(res.url)
